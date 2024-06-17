@@ -10,7 +10,7 @@
 SoftwareSerial mySerial(rxPin, txPin);
 Adafruit_SSD1306 display = Adafruit_SSD1306(128, 32, &Wire);
 
-byte counter = 0;
+int counter = 0;
 
 void setup()
 {
@@ -30,11 +30,18 @@ void setup()
 
     // Initialize USB serial
     Serial.begin(115200);
+    // Initialize ESP32 serial
+    mySerial.begin(115200);
 }
 
 void loop()
 {
-    Serial.println("Hello world!");
+    while (mySerial.available() > 0) {
+        String buffer = mySerial.readStringUntil('\n');
+        Serial.print("I received ");
+        Serial.println(buffer);
+    }
+
     display.clearDisplay();
     display.setCursor(0, 0);
 
@@ -43,9 +50,9 @@ void loop()
     display.display();
 
     counter++;
-    if (counter >= 8)
+    if (counter >= 200)
     {
         counter = 0;
     }
-    delay(1000);
+    delay(100);
 }
