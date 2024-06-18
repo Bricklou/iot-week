@@ -12,7 +12,6 @@ void configure_screen() {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);
-  display.println("Hello world!");
   display.display();
 }
 

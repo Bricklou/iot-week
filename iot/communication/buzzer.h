@@ -4,17 +4,17 @@
 #define BUZZER_PIN 8
 
 
-void configure_buzzer() {
-  pinMode(BUZZER_PIN, OUTPUT);
-  buzzer_off();
-}
-
 void buzzer_off() {
   noTone(BUZZER_PIN);
 }
 
 void buzzer_tone(int frequency) {
     tone(BUZZER_PIN, frequency);
+}
+
+void configure_buzzer() {
+  pinMode(BUZZER_PIN, OUTPUT);
+  buzzer_off();
 }
 
 void buzzer_tone(int frequency, int duration) {

@@ -2,6 +2,6 @@
     "board": "arduino:avr:uno",
     "sketch": "iot/iot.ino",
     "output": "./build",
-    "port": "/dev/ttyACM1",
+    "port": "/dev/ttyACM2",
     "programmer": "avrispmkii"
 }
