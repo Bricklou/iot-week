@@ -16,4 +16,9 @@ void configure_screen() {
   display.display();
 }
 
+void reset_screen() {
+    display.clearDisplay();
+    display.setCursor(0, 0);
+}
+
 #endif

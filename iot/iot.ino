@@ -1,10 +1,9 @@
-#include <SoftwareSerial.h>
-
 #include "sensors/light_sensor.h"
 #include "communication/serial_com.h"
 #include "communication/screen.h"
 #include "communication/buzzer.h"
-
+#include "sensors/proximity.h"
+#include "sensors/air_quality.h"
 
 void setup() {
   // Initialize ESP32 communication
@@ -14,16 +13,21 @@ void setup() {
 
   // Initialize OLED screen
   configure_screen();
+
+  configure_proximity_sensor();
 }
 
 void loop() {
-  display.clearDisplay();
-  display.setCursor(0, 0);
+  reset_screen();
+  
+  bool is_polluted = air_quality_polluted();
 
-  display.print("Hello world! ");
-  int light = read_light_sensor();
-  display.println(light);
+  if (is_polluted) {
+    display.println("Polluted air!");
+  } else {
+    display.println("Air Ok!");
+  }
   display.display();
 
-  delay(100);
+  delay(200);
 }

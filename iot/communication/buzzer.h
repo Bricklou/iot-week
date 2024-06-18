@@ -6,7 +6,19 @@
 
 void configure_buzzer() {
   pinMode(BUZZER_PIN, OUTPUT);
-  digitalWrite(BUZZER_PIN, 0);
+  buzzer_off();
+}
+
+void buzzer_off() {
+  noTone(BUZZER_PIN);
+}
+
+void buzzer_tone(int frequency) {
+    tone(BUZZER_PIN, frequency);
+}
+
+void buzzer_tone(int frequency, int duration) {
+    tone(BUZZER_PIN, frequency, duration);
 }
 
 #endif
