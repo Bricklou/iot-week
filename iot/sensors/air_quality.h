@@ -7,11 +7,14 @@
 
 AirQualitySensor sensor(AIR_QUALITY_PIN);
 
+int last_air_quality = AirQualitySensor::FRESH_AIR;
+
 bool configure_air_quality_sensor() {
     return sensor.init();
 }
 
 int read_air_quality() {
+    last_air_quality = sensor.slope();
     return sensor.slope();
 }
 

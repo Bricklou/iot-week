@@ -20,4 +20,10 @@ void reset_screen() {
     display.setCursor(0, 0);
 }
 
+void print_screen(const char* text) {
+  reset_screen();
+  display.println(text);
+  display.display();
+}
+
 #endif

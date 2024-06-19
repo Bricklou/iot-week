@@ -7,56 +7,55 @@
 #include "communication/led.h"
 #include "sensors/button.h"
 
-bool toggle = false;
+#include "actions.h"
+#include "systems/data.h"
+#include "systems/air_quality.h"
+#include "systems/light.h"
 
-void setup() {
-  // Initialize ESP32 communication
-  configure_serial_com();
-
+void setup()
+{
   configure_buzzer();
-  configure_button();
-
-  // Initialize OLED screen
   configure_screen();
-
-  configure_proximity_sensor();
+  configure_serial_com();
   configure_led();
-  if (!configure_air_quality_sensor()) {
-    reset_screen();
-    display.println("Air sensor ERROR!");
-    display.display();
 
-    while(true) {}
-  }
+  Serial.begin(115200);
+  Serial.println("Hello");
 }
 
-void loop() {
-  reset_screen();
-  
-  int quality = read_air_quality();
-  bool state = air_quality_polluted();
-  int value = read_air_quality_value();
+void loop()
+{
+  update_buttons();
 
-  if (state) {
-    display.print("Polluted! ");
-  } else {
-    display.print("Ok! ");
+  if (is_button1_released()) {
+    when_button1_pressed();
   }
-  display.print(value);
-  display.print(" ");
-  display.println(quality);
 
-  if (is_button1_pressed()) {
-    display.println("pressed");
-  } else {
-    display.println("not pressed");
-  }
-  display.display();
+  check_air_quality();
+  check_light();
+  /*// Check light intensity
+  light_intensity = read_light_sensor();
+  if (light_intensity < LIGHT_THRESHOLD)
+  {
+    // Run the alert process
 
-  if (toggle) {
-    led_on();
-  } else {
-    led_off();
+    return;
   }
-  toggle = !toggle;
+
+  // Check proximity
+
+  bool current_presence = proximity_is_present();
+  if (current_presence)
+  {
+    // Compare to last presence
+
+    return;
+  }
+
+  */
+
+  update_alert();
+
+  send_data();
+  delay(20);
 }
