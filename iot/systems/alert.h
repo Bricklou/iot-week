@@ -35,7 +35,6 @@ void emit_alert(alert_t alert) {
 }
 
 void clear_alert() {
-    Serial.println("alert cleared");
     _current_alert = alert_t {.message="", .type = alert_type_none };
     reset_screen();
     display.display();
@@ -48,7 +47,7 @@ void update_alert() {
     if (millis() - last_led_update < 150) { return; }
 
     if (sequence_index < SEQUENCE_SIZE) {
-        buzzer_tone(500, 30);
+        buzzer_tone(50, 30);
         sequence_index ++;
     }
     

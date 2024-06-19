@@ -11,6 +11,7 @@
 #include "systems/data.h"
 #include "systems/air_quality.h"
 #include "systems/light.h"
+#include "systems/proximity.h"
 
 void setup()
 {
@@ -20,7 +21,6 @@ void setup()
   configure_led();
 
   Serial.begin(115200);
-  Serial.println("Hello");
 }
 
 void loop()
@@ -33,26 +33,17 @@ void loop()
 
   check_air_quality();
   check_light();
-  /*// Check light intensity
-  light_intensity = read_light_sensor();
-  if (light_intensity < LIGHT_THRESHOLD)
-  {
-    // Run the alert process
+  check_presence();
 
-    return;
+  if (_current_alert.type == alert_type_none) {
+    bool current_presence = proximity_is_present();
+    if (current_presence)
+    {
+      print_screen("Present");
+    } else {
+      print_screen("Absent");
+    }
   }
-
-  // Check proximity
-
-  bool current_presence = proximity_is_present();
-  if (current_presence)
-  {
-    // Compare to last presence
-
-    return;
-  }
-
-  */
 
   update_alert();
 
