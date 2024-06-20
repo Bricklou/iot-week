@@ -5,12 +5,13 @@
 #include "alert.h"
 
 bool previous_presence_state = false;
+bool presence_state = false;
 unsigned long absence_start = 0;
 unsigned long presence_start = 0;
 unsigned long presence_accumulated_time = 0;
 
-#define DEBOUNCE_TIME 10000 //5*60*1000
-#define TRIGGER_TIME 20000 //2*60*60*1000
+#define DEBOUNCE_TIME   60000
+#define TRIGGER_TIME  3600000
 
 void check_presence() {
     bool current_presence = proximity_is_present();
@@ -25,21 +26,29 @@ void check_presence() {
             if (absence_start != 0 && duration < DEBOUNCE_TIME) {
                 // Add the difference
                 presence_accumulated_time += duration;
+                presence_state = true;
             } else {
                 presence_accumulated_time = 0;
+                presence_state = false;
             }
         } else {
             // Otherwise, if they were present before, accumulate the time
             presence_accumulated_time += current_time - presence_start;
+            presence_state = true;
         }
 
         presence_start = current_time;
         previous_presence_state = true;
     } else {
         if (previous_presence_state) {
+            absence_start = current_time;
             presence_accumulated_time += current_time - presence_start;
+            presence_state = true;
+        } else if (!previous_presence_state && (current_time - absence_start) > DEBOUNCE_TIME) {
+            presence_accumulated_time = 0;
+            presence_state = false;
         }
-        absence_start = current_time;
+
         previous_presence_state = false;
     }
 
