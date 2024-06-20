@@ -24,7 +24,7 @@ unsigned int sequence_index = 0;
 bool led_state = false;
 
 void emit_alert(alert_t alert) {
-    if (_current_alert.type == alert.type) {
+    if (_current_alert.type != alert_type_none) {
         return;
     }
     _current_alert = alert;

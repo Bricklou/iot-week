@@ -36,13 +36,19 @@ void loop()
   check_presence();
 
   if (_current_alert.type == alert_type_none) {
-    bool current_presence = proximity_is_present();
-    if (current_presence)
+
+    reset_screen();
+    if (presence_state)
     {
-      print_screen("Present");
+      display.print("Present");
     } else {
-      print_screen("Absent");
+      display.print("Absent");
     }
+    if (!previous_presence_state) {
+      display.print(" (!) ");
+      display.println((millis() - presence_start) / 1000);
+    }
+    display.display();
   }
 
   update_alert();
